@@ -21,7 +21,7 @@
             padding: 20px;
             text-align: center;
         }
-        .search-bar {
+        .filters {
             margin-bottom: 20px;
         }
         .property {
@@ -53,16 +53,34 @@
     </header>
     <div class="container">
         <h2>Find Your Perfect Home</h2>
-        <input type="text" id="searchBar" class="search-bar" placeholder="Search properties..." onkeyup="filterListings()">
+        <div class="filters">
+            <input type="text" id="searchBar" placeholder="Search properties..." onkeyup="filterListings()">
+            <select id="priceFilter" onchange="filterListings()">
+                <option value="">Price Range</option>
+                <option value="0-300000">Under $300,000</option>
+                <option value="300000-500000">$300,000 - $500,000</option>
+                <option value="500000">Over $500,000</option>
+            </select>
+            <select id="bedFilter" onchange="filterListings()">
+                <option value="">Bedrooms</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+            </select>
+            <select id="bathFilter" onchange="filterListings()">
+                <option value="">Bathrooms</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+            </select>
+        </div>
         <div id="propertyList">
-            <div class="property" data-title="Luxury Home in Downtown">
-                <img src="house1.jpg" alt="Luxury Home">
+            <div class="property" data-title="Luxury Home in Downtown" data-price="500000" data-beds="3" data-baths="2">
+                <img src="images/house1.jpg" alt="Luxury Home">
                 <h3>Luxury Home in Downtown</h3>
                 <p>Price: $500,000</p>
                 <p>3 Beds | 2 Baths | 1,800 sqft</p>
             </div>
-            <div class="property" data-title="Cozy Suburban House">
-                <img src="house2.jpg" alt="Cozy Suburban House">
+            <div class="property" data-title="Cozy Suburban House" data-price="350000" data-beds="4" data-baths="3">
+                <img src="images/house2.jpg" alt="Cozy Suburban House">
                 <h3>Cozy Suburban House</h3>
                 <p>Price: $350,000</p>
                 <p>4 Beds | 3 Baths | 2,200 sqft</p>
@@ -74,12 +92,26 @@
     </footer>
     <script>
         function filterListings() {
-            let input = document.getElementById('searchBar').value.toLowerCase();
+            let searchInput = document.getElementById('searchBar').value.toLowerCase();
+            let priceFilter = document.getElementById('priceFilter').value;
+            let bedFilter = document.getElementById('bedFilter').value;
+            let bathFilter = document.getElementById('bathFilter').value;
             let properties = document.querySelectorAll('.property');
             
             properties.forEach(property => {
                 let title = property.getAttribute('data-title').toLowerCase();
-                if (title.includes(input)) {
+                let price = parseInt(property.getAttribute('data-price'));
+                let beds = parseInt(property.getAttribute('data-beds'));
+                let baths = parseInt(property.getAttribute('data-baths'));
+                let priceMatch = (priceFilter === "" || 
+                                 (priceFilter === "0-300000" && price < 300000) || 
+                                 (priceFilter === "300000-500000" && price >= 300000 && price <= 500000) || 
+                                 (priceFilter === "500000" && price > 500000));
+                let bedMatch = (bedFilter === "" || beds >= parseInt(bedFilter));
+                let bathMatch = (bathFilter === "" || baths >= parseInt(bathFilter));
+                let searchMatch = title.includes(searchInput);
+                
+                if (priceMatch && bedMatch && bathMatch && searchMatch) {
                     property.style.display = "block";
                 } else {
                     property.style.display = "none";
@@ -89,4 +121,5 @@
     </script>
 </body>
 </html>
+
 
