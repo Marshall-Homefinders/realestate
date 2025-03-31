@@ -54,11 +54,29 @@
         <h2>Find Your Dream Home</h2>
         <div class="lead-form">
             <h3>Sign Up to Access Listings</h3>
-            <form>
-                <input type="text" placeholder="Your Name" required><br><br>
-                <input type="email" placeholder="Your Email" required><br><br>
-                <button type="submit">Get Access</button>
-            </form>
+           <form id="leadForm">
+    <input type="text" id="name" placeholder="Your Name" required><br><br>
+    <input type="email" id="email" placeholder="Your Email" required><br><br>
+    <button type="submit">Get Access</button>
+</form>
+
+<script>
+    document.getElementById("leadForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Stop default form submission
+        
+        // Capture user info (you can later send this to a database)
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        
+        // Store in local storage (temporary solution)
+        localStorage.setItem("userName", name);
+        localStorage.setItem("userEmail", email);
+
+        // Redirect to listings page (update 'listings.html' when you add it)
+        window.location.href = "listings.html"; 
+    });
+</script>
+
         </div>
     </div>
     <footer>
